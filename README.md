@@ -1,1 +1,2 @@
 # node-shop
+log = 

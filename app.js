@@ -1,13 +1,21 @@
 // this file is spinning up an express application which will make handling requests easier,
 // so app IS Express application, Express is FOR Handle the requests удобнее чем просто функциями node.js: отслеживание ссылок и добавляет возможность работы с различными шаблонизаторами
-const express = require('express');
-const app = express(); // call express as a function which will spin up an express application where we can use all kind of utility methods
-const log = require('morgan');
+const express     = require('express');
+const app         = express(); // call express as a function which will spin up an express application where we can use all kind of utility methods
+const log         = require('morgan');
+const bodyParser  = require(`body-parser`);
+const mongooseClient = require('mongoose');
 
 const productRoutesHandler = require('./api/routes/products');
 const ordersRoutesHandler = require('./api/routes/orders');
-const morgan = require('morgan');
-const bodyParser = require(`body-parser`);
+
+// mongooseClient.connect(
+//     `mongodb+srv://Sandy:${MONGO_ATLAS_PW}@clusternamenodeshop.vtjko.mongodb.net/<dbname>?retryWrites=true&w=majority`,
+//     {
+//         useMongoClient : true // under the hood it will use require('mongodb').MongoClient for connecting which is recommended way to use DB
+//     }
+// ) // path to cloud
+
 
 /* middleware function - любая ф-ция выполняемая ДО отправки сервером response и которая имеет доступ к req & res.
     https://developer.mozilla.org/ru/docs/Learn/Server-side/Express_Nodejs/Introduction 
@@ -18,10 +26,12 @@ const bodyParser = require(`body-parser`);
     //         message: 'It works'
     //     });
     // }); 
-    app.use(morgan('dev')); // funnel all requests through log first
+    app.use(log('dev')); // funnel all requests through log first
     app.use(bodyParser.urlencoded({extended: false})) // if false, then req.body will contain key-value pairs, where the value can be a string or array
     app.use(bodyParser.json()); // extract json data for easy to use. 
     // As req.body’s shape is based on user-controlled input, all properties and values in this object are untrusted!
+
+
 
     // Cross-Origin-Resource-Sharing error handling for BROWSERS only. Here I just set headers for all further responses, I do not send anything
     app.use((req, res, next) => {

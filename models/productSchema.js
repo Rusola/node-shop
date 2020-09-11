@@ -7,5 +7,6 @@ const productSchema = mongoose.Schema({
   price: Number
 });
 
-// now we create a real js object=model(created by given layout) which will have CRUD methods
-module.exports = mongoose.model('Product', productSchema);
+/* now we create a real js object=model(created by given layout) which will have CRUD methods
+Producttt will be a collection name */
+module.exports = mongoose.model('Producttt', productSchema);

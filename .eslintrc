@@ -9,6 +9,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "newline-per-chained-call": ["error", { "ignoreChainWithDepth": 2 }],
         "indent": [
             "error",
             4

@@ -1,6 +1,6 @@
 {
     "env" : {
-        "MONGO_ATLAS-PW": "Sandy"
+        "MONGO_ATLAS-PW": "54321"
     }
 
 }

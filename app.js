@@ -11,11 +11,12 @@ const ordersRoutesHandler = require('./api/routes/orders');
 
 mongooseClient.connect(
 // path to the cloud Atlas DB
-  `mongodb+srv://Sandy:${process.env.MONGO_ATLAS_PW}@clusternamenodeshop.vtjko.mongodb.net/ClusterNameNodeShop?retryWrites=true&w=majority`,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
+    'mongodb+srv://Sandy:9789jojo@cluster0.vtjko.mongodb.net/my_first_db_name?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+       
+    }
 );
 
 
@@ -29,26 +30,24 @@ mongooseClient.connect(
 //     });
 // }); 
 app.use(log('dev')); // funnel all requests through log first
-app.use(bodyParser.urlencoded({extended: false})) // if false, then req.body will contain key-value pairs, where the value can be a string or array
+app.use(bodyParser.urlencoded({extended: false})); // if false, then req.body will contain key-value pairs, where the value can be a string or array
 app.use(bodyParser.json()); // extract json data for easy to use. 
 // As req.body’s shape is based on user-controlled input, all properties and values in this object are untrusted!
 
-
-
 // Cross-Origin-Resource-Sharing error handling for BROWSERS only. Here I just set headers for all further responses, I do not send anything
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // разрешить всем * urls дергать api с любых машин
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Reqested-With, Content-Type, Accept, Authorization'
-  ); // только какие headers будут приниматься
+    res.header('Access-Control-Allow-Origin', '*'); // разрешить всем * urls дергать api с любых машин
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Reqested-With, Content-Type, Accept, Authorization'
+    ); // только какие headers будут приниматься
 
-  // При POST, PUT request, Самым еулевым запросом браузер спросит разрешено ли ему такие запросы отправлять
-  if(req.method === 'OPTIONS'){
-    req.header('Access-Control-Allow-Headers'); // а мы ему ответим - разрешаем тебе вот эти перечисленные запросы серверу отправлять
-    req.status(200).json({tt: 'dd'}); // no need to send body
-  }
-  next(); // нужно всегда ставить если я не беру готовый midlware(там уже это включено) иначе we block our incoming requests
+    // При POST, PUT request, Самым еулевым запросом браузер спросит разрешено ли ему такие запросы отправлять
+    if(req.method === 'OPTIONS'){
+        req.header('Access-Control-Allow-Headers'); // а мы ему ответим - разрешаем тебе вот эти перечисленные запросы серверу отправлять
+        req.status(200).json({tt: 'dd'}); // no need to send body
+    }
+    next(); // нужно всегда ставить если я не беру готовый midlware(там уже это включено) иначе we block our incoming requests
 });
 
 app.use('/products', productRoutesHandler);  // anything that starts with /product will use productRoutesHandler function instructions
@@ -56,20 +55,20 @@ app.use('/orders', ordersRoutesHandler);
 
 // если дошло до этой строки значит ни один route не подошел
 app.use((req, res, next)=> {
-  const my_error = new Error('My message-нет такого route-404!')
-  my_error.status = 404;
-  next(my_error);
+    const my_error = new Error('My message-нет такого route-404!');
+    my_error.status = 404;
+    next(my_error);
 });
 
 // самый последний собиратель ошибок
 app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.json({
-    last_error: {
-      message: error.message,
-    }
-  })
-})
+    res.status(error.status || 500);
+    res.json({
+        last_error: {
+            message: error.message,
+        }
+    });
+});
 
 module.exports = app;
 

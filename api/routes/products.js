@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Product = require('../../models/productSchema');
+const Product = require('../../models/productModel');
 
 router.get('/', (req, res, next) => {
     // res.status(200).json({
@@ -22,6 +22,7 @@ router.get('/', (req, res, next) => {
                         price : doc.price,
                         _id   : doc._id,
                         you_can_send_request : {
+                            description: 'You can get detailed info about this product',
                             type : 'GET',
                             url  : 'Dynamically fetch to get the id of the service i am running on: http://localhost:3000/products/' + doc._id
                         }
@@ -62,10 +63,19 @@ router.post('/', (req, res, next) => {
     // An instance of a model is called a document(here product)?
     const product = new Product(sendable_doc);
     product.save() // storing in DB
-        .then(result => {
+        .then(doc => {
             res.status(201).json({
                 message: 'New product has been created!',
-                my_product: product
+                my_product: {
+                    name : doc.name,
+                    price: doc.price,
+                    _id: doc._id,
+                    request: {
+                        description: 'You can get detailed info about this product',
+                        type: 'GET',
+                        url: 'http://localhost:3000/products/' + doc._id
+                    }
+                }
             });
         })
         .catch(err => {
@@ -84,13 +94,20 @@ router.post('/', (req, res, next) => {
 router.get('/:anyVarNameID', (req, res, next) => {
     const id = req.params.anyVarNameID;
     Product.findById(id) // results in a single document by its _id field
+        .select('name price _id')
         .exec() // transform it to a promise
         .then(doc => {
-
             // We need to check if the doc is not Null
             if(doc){
                 console.log(doc);
-                res.status(200).json(doc);
+                res.status(200).json({
+                    product: doc,
+                    request : {
+                        description : 'FOR PUBLIC: You can get all products',
+                        type: 'GET',
+                        url : 'http://localhost:3000/products'
+                    }
+                });
             }else {
                 // that is not a program error, just null result
                 res.status(404).json({
@@ -111,23 +128,26 @@ router.get('/:anyVarNameID', (req, res, next) => {
 });
 
 router.patch('/:anyVarNameID', (req, res, next) => {
-    // res.status(200).json({
-    //     message: 'Updated product!'
-    // });
     const id = req.params.anyVarNameID;
 
     // we should adjust to any req: with payload as newName only, or both, or with NO payload
     const updatesOperations = {};
-    for( const ops of req.body) {// req.body will be an arr  with operations. propName & value belong to operations
+    for( const ops of req.body) {// req.body will be an arr with operations, so postman should have a body as an array of objects. propName & value belong to each operation
         updatesOperations[ops.propName] = ops.value;
     }
-    // $set is a special propert name understood by mongoose
+    // $set is a special property name understood by mongoose
     // Product.update({_id : id}, {$set: { name : req.body.newName, price: req.body.newPrice }});
     Product.update({_id : id}, {$set: updatesOperations})
         .exec()
         .then(result => {
             console.log(result);
-            res.status(200).json(result); 
+            res.status(200).json({
+                message : 'Product updated',
+                request : {
+                    type : 'GET',
+                    url : 'http://localhost:3000/products/' + id 
+                }
+            }); 
         })
         .catch(err => {
             console.log(err);
@@ -150,7 +170,23 @@ router.delete('/:anyVarNameID', (req, res, next) => {
     Product.deleteOne({_id : id})
         .exec()
         .then(result => {
-            res.status(200).json(result);
+            if(result.deletedCount === 0){
+                res.status(404).json({
+                    my_message : 'No item to delete'
+                });
+            }else{
+                res.status(200).json({
+                    result : result,
+                    message :'Product deleted',
+                    type : 'PUT',
+                    url : 'http://localhost:3000/products/',
+                    description : 'PUBLIC: you can create another product, by providing this payload:',
+                    body : {
+                        name : 'String',
+                        price : 'Number'
+                    }
+                });
+            }
         })
         .catch(err => {
             console.log(err);

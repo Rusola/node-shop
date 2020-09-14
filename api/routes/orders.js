@@ -6,8 +6,9 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
     Order
-        .find() // find an arr of all docs
-        .select('_id quantity product ') // filter a db doc properties
+        .find() // find an arr of all docs(orders)
+        .select('_id product_id quantity') // filter a db doc properties
+        .populate('product_id')// add info about doc that tight by the name of my reference property
         .exec()
         .then(docs => {
             res.status(200).json({
@@ -15,7 +16,7 @@ router.get('/', (req, res, next) => {
                 orders: docs.map(doc => {
                     return {
                         _id: doc._id,
-                        product: doc.product,
+                        product_id: doc.product_id,
                         quantity: doc.quantity,
                         request: {
                             type: 'GET',
@@ -46,7 +47,7 @@ router.post('/', (req, res, next) => {
 
             const order = new Order({
                 _id: mongoose.Types.ObjectId(), // will generate a new id for an order
-                product : req.body.productId,
+                product_id : req.body.productId,
                 quantity: req.body.passed_quantity
             });
             return order.save(); // will give us a real promise no need to exec()
@@ -56,7 +57,7 @@ router.post('/', (req, res, next) => {
                 message: 'Order stored',
                 created_order: {
                     _id : doc._id,
-                    product: doc.product,
+                    product_id: doc.product_id,
                     quantity: doc.quantity
                 },
                 request: {
@@ -84,17 +85,24 @@ router.post('/', (req, res, next) => {
 router.get('/:orderId', (req, res, next) => {
     // Get id from the URL
     Order.findById(req.params.orderId) //see name on line 84
+        .populate('product_id', 'name product_id')// name of my reference property & properties that need to be fetched from there
         .exec()
         .then(order => {
-            res.status(200).json({
-                my_order: order,
-                request : {
-                    type : 'GET',
-                    description: 'Public, you can see orders',
-                    url : 'http://localhost:3000/orders'
-                }
+            if(!order){
+                return res.status(404).json({
+                    message: 'Not existing order id specified'
+                });
+            }else{
+                res.status(200).json({
+                    my_order: order,
+                    request : {
+                        type : 'GET',
+                        description: 'Public, you can see orders',
+                        url : 'http://localhost:3000/orders'
+                    }
+                });
 
-            });
+            }
         })
         .catch(err => {
             res.status(500).json({
@@ -128,7 +136,7 @@ router.delete('/:orderId', (req, res, next) => {
                     url : 'http://localhost:3000/orders/',
                     description : 'PUBLIC: you can create another order, by providing this payload:',
                     body : {
-                        product : 'String',
+                        product_id : 'String',
                         quantity : 'Number'
                     }
                 });

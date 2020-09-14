@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // param inside is a schema how my order should look like
 const orderSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId, // value here defines a type of data:long string as a serial number
-    product : {
+    product_id : {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Producttt', // ref is an important key word for connecting to another model. Specify the Name of the model(collection) to connect to
         required: true

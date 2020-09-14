@@ -178,7 +178,7 @@ router.delete('/:anyVarNameID', (req, res, next) => {
                 res.status(200).json({
                     result : result,
                     message :'Product deleted',
-                    type : 'PUT',
+                    type : 'POST',
                     url : 'http://localhost:3000/products/',
                     description : 'PUBLIC: you can create another product, by providing this payload:',
                     body : {

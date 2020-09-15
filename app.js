@@ -19,6 +19,14 @@ mongooseClient.connect(
     }
 );
 
+// если соединение упадет гапишеи об этом в консоли
+const db = mongooseClient.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.on('open', function(){
+    console.log('we are connected');
+    
+});
+
 
 /* middleware function - любая ф-ция выполняемая ДО отправки сервером response и которая имеет доступ к req & res.
     https://developer.mozilla.org/ru/docs/Learn/Server-side/Express_Nodejs/Introduction 

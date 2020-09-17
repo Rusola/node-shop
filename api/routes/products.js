@@ -162,10 +162,10 @@ router.delete('/:anyVarNameID', (req, res, next) => {
     // res.status(200).json({
     //     message: 'Deleted product!'
     // });
-
+    
     // Get id from the URL
     const id = req.params.anyVarNameID;
-     
+    
     // object inside should have 1 or more criteria of object to remove
     Product.deleteOne({_id : id})
         .exec()

@@ -19,7 +19,7 @@ mongooseClient.connect(
     }
 );
 
-// если соединение упадет гапишеи об этом в консоли
+// если соединение упадет напишеи об этом в консоли
 const db = mongooseClient.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.on('open', function(){

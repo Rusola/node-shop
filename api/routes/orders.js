@@ -66,7 +66,7 @@ router.post('/', (req, res, next) => {
                     url : 'http://localhost:3000/orders/' + doc._id
                 }
             });
-        })
+        })// Attention: не рекомендуется отправлять клиенту саму ощибку(слишком много информаыии злодеям)досатточно console.log который покажется на самом сервере
         .catch(err => {
             res.status(500).json({
                 msg: 'We do not have such product',

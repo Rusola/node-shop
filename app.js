@@ -9,14 +9,26 @@ const mongooseClient = require('mongoose');
 const productRoutesHandler = require('./api/routes/products');
 const ordersRoutesHandler = require('./api/routes/orders');
 
-mongooseClient.connect(
-// path to the cloud Atlas DB
-    'mongodb+srv://Sandy:9789jojo@cluster0.vtjko.mongodb.net/my_first_db_name?retryWrites=true&w=majority',
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+// mongooseClient.connect(
+// // path to the cloud Atlas DB
+//     'mongodb+srv://Sandy:9789jojo@cluster0.vtjko.mongodb.net/my_first_db_name?retryWrites=true&w=majority',
+//     {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true
        
-    }
+//     }
+// );
+var options = {
+    // server: {},
+    // replset: {}, 
+    useNewUrlParser: true,
+    useUnifiedTopology: true        
+};
+// options.server.socketOptions = options.replset.socketOptions = { keepAlive: 1};
+
+mongooseClient.connect(
+    'mongodb://mongodb/my_first_db_name_for_docker',
+    options
 );
 
 // если соединение упадет напишеи об этом в консоли

@@ -6,7 +6,8 @@ const orderSchema = mongoose.Schema({
     product_id : {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Producttt', // ref is an important key word for connecting to another model. Specify the Name of the model(collection) to connect to
-        required: true
+        required: true,
+        select: false // запретит базе выбирать это поле для отправки найденой выборки
     },
     quantity: {
         type : Number,

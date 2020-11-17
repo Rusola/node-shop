@@ -37,7 +37,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: myfriday/node-shop
+          tags: myfriday/node-shop:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

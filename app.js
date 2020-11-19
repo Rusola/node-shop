@@ -31,6 +31,7 @@ mongooseClient.connect(
 //     options
 // );
 
+
 // если соединение упадет напишеи об этом в консоли
 const db = mongooseClient.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

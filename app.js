@@ -40,8 +40,6 @@ db.on('open', function(){
     console.log('we are connected');
     
 });
-
-
 /* middleware function - любая ф-ция выполняемая ДО отправки сервером response и которая имеет доступ к req & res.
     https://developer.mozilla.org/ru/docs/Learn/Server-side/Express_Nodejs/Introduction 
     Middleware functions are functions made for Express that have access to 3 variables: the request object (req), the response object (res), and the 'next' function in the application’s request-response cycle 

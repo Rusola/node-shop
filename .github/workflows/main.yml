@@ -59,14 +59,14 @@ jobs:
           
       - name:  Create new ElastikBeanStalk app
         run: |
-          aws elastikbeanstalk create-application-version \
+          aws elasticbeanstalk create-application-version \
           --application-name ${{ env.BEANSTALK_APP_NAME }} \
           --source-bundle S3Bucket-"${{ env.BEANSTALK_APP_NAME }}", S3Key-"${{ env.DEPLOY_PACKAGE_NAME }}" \
           --version-label "v-${{ github.sha }}" \
           --description "created after Commit ${{ github.sha }}"
            
       - name: Deploy new ElastikBeanStalk app
-        run: aws elastikbeanstalk update-environment --environment-name ${{ env.BEANSTALK_ENV }} --version-label "v-${{ github.sha }}" 
+        run: aws elasticbeanstalk update-environment --environment-name ${{ env.BEANSTALK_ENV }} --version-label "v-${{ github.sha }}" 
 
 # Next job will run only when deployment finished
   my_dockerHub_part:

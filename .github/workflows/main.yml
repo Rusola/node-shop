@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI to Docker Hub
+name: CI to AWS & Docker Hub
 env:
   S3_BUCKET_NAME: "olga-shop-bucket"
   BEANSTALK_APP_NAME:  "shopBeanstalk"  
@@ -68,31 +68,4 @@ jobs:
       - name: Deploy new ElastikBeanStalk app
         run: aws elasticbeanstalk update-environment --environment-name ${{ env.BEANSTALK_ENV }} --version-label "v-${{ github.sha }}" 
 
-# Next job will run only when deployment finished
-  my_dockerHub_part:
-    runs-on: ubuntu-latest
-    needs: [my_cd_part]
 
-    steps:
-       
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./Dockerfile
-          push: true
-          tags: myfriday/node-shop:latest
-
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }} ./ -x*.git*

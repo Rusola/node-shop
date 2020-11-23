@@ -1,6 +1,13 @@
 # This is a basic workflow to help you get started with Actions
 
 name: CI to Docker Hub
+env:
+  S3_BUCKET_NAME: "olga-shop-bucket"
+  BEANSTALK_APP_NAME:  "shopBeanstalk"  
+   # Shopbeanstalk-env cold be production pr staging env
+  BEANSTALK_ENV: "Shopbeanstalk-env"
+  DEPLOY_PACKAGE_NAME: "my_shop_app_${{github.sha}}.zip"  
+  AWS_REGION: "us-east-2"
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -10,15 +17,18 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  # This workflow contains a single job called " my_ci_part"
+  my_ci_part:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     steps:
     
-      - name: Check Out Repo 
+      - name: Git clone our Repo 
         uses: actions/checkout@v2
+        
+      - name: Create zip deployment package
+        run: zip -r ${{env.}}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -40,4 +50,4 @@ jobs:
           tags: myfriday/node-shop:latest
 
       - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+        run: echo ${{ steps.docker_build.outputs.digest }} ./ -x*.git*

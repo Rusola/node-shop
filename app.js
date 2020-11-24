@@ -1,4 +1,5 @@
 // this file is spinning up an express application which will make handling requests easier,
+
 // so app IS Express application, Express is FOR Handle the requests удобнее чем просто функциями node.js: отслеживание ссылок и добавляет возможность работы с различными шаблонизаторами
 const express     = require('express');
 const app         = express(); // call express as a function which will spin up an express application where we can use all kind of utility methods

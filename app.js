@@ -75,7 +75,7 @@ app.use('/orders', ordersRoutesHandler);
 
 // если дошло до этой строки значит ни один route не подошел
 app.use((req, res, next)=> {
-    const my_error = new Error('My message-нет такого route-404! 11/20/2020 Поэтому обращения сюда портят aws health check);
+    const my_error = new Error('My message-нет такого route-404! 11/20/2020 Поэтому обращения сюда портят aws health check');
     my_error.status = 404;
     next(my_error);
 });

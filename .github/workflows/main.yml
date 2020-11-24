@@ -3,9 +3,9 @@
 name: CI to AWS & Docker Hub
 env:
   S3_BUCKET_NAME: "olga-shop-bucket"
-  BEANSTALK_APP_NAME:  "shopBeanstalk"  
+  BEANSTALK_APP_NAME:  "new-shop-app"  
    # Shopbeanstalk-env cold be production pr staging env
-  BEANSTALK_ENV: "Shopbeanstalk-env"
+  BEANSTALK_ENV: "NewShopApp-env"
   DEPLOY_PACKAGE_NAME: "my_shop_app_${{ github.sha }}.zip"  
   AWS_REGION: "us-east-2"
 

@@ -1,5 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
+
 name: CI to AWS & Docker Hub
 env:
   S3_BUCKET_NAME: "olga-shop-bucket"

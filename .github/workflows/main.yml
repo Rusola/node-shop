@@ -25,14 +25,16 @@ jobs:
     steps:
     
     - name: Clone repo for tests
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
     
     - name: Setup Node
       uses: actions/setup-node@v1
       
+    - name: Install npm packages
+      run: npm install
+      
     - name: Run all tests
-    - run: npm ci
-    - run: npm run test
+      run: npm run test
      
   # This workflow contains a single job called " my_ci_part"
   my_ci_part:
